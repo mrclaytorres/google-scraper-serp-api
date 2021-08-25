@@ -8,8 +8,49 @@ import os
 import os.path
 import time
 import csv
+from serpapi import GoogleSearch
+import creds
 
 def google_result():
+
+    ranks = []
+    page_title = []
+    urls = []
+    used_query = []
+    search_query_list = []
+
+    #Get search query and concatinate it to the url summary
+    with open('search_query.txt', 'r', encoding='UTF8') as search_queries:
+        for query in search_queries:
+            search_query_list.append(query)
+
+    for query in search_query_list:
+        print(query)
+        params = {
+            "engine": "google",
+            "q": query,
+            "gl": "us",
+            "api_key": creds.apikey
+        }
+        print(params)
+
+        search = GoogleSearch(params)
+        results = search.get_dict()
+        
+        try:
+            if results['organic_results']:
+
+                organic_results = results['organic_results']
+                
+                for item in organic_results:
+                    ranks.append(item['position'])
+                    page_title.append(item['title'])
+                    urls.append(item['link'])
+                    used_query.append(results['search_parameters']['q'])
+            else:
+                pass
+        except:
+            pass
 
     # Save scraped URLs to a CSV file
     now = datetime.datetime.now().strftime('%Y%m%d-%Hh%M')
