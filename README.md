@@ -35,7 +35,7 @@ $ python scraper.py
     params = {
                 "engine": "google",
                 "q": query,
-                **"num": 200**,
+                "num": 200,
                 "location": location,
                 "gl": "us",
                 "api_key": creds.apikey
