@@ -151,6 +151,7 @@ proxy_list.csv
 csvfiles/*
 recaptcha_requests/*
 !csvfiles/.gitkeep
+search_query.csv
 
 # Credentials
 creds.py
