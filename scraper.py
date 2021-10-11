@@ -21,37 +21,45 @@ def google_result():
     time_start = datetime.datetime.now().replace(microsecond=0)
 
     #Get search query and concatinate it to the url summary
-    with open('search_query.txt', 'r', encoding='UTF8') as search_queries:
-        for query in search_queries:
-            search_query_list.append(query)
+    # with open('search_query.txt', 'r', encoding='UTF8') as search_queries:
+    #     for query in search_queries:
+    #         search_query_list.append(query)
 
-    for query in search_query_list:
-        print(f'Searching for query: {query}')
-        params = {
-            "engine": "google",
-            "q": query,
-            "gl": "us",
-            "num": "200",
-            "api_key": creds.apikey
-        }
+    with open('search_query.csv') as f:
+        reader = csv.DictReader(f)
 
-        search = GoogleSearch(params)
-        results = search.get_dict()
-        
-        try:
-            if results['organic_results']:
+        for line in reader:
 
-                organic_results = results['organic_results']
-                
-                for item in organic_results:
-                    ranks.append(item['position'])
-                    page_title.append(item['title'])
-                    urls.append(item['link'])
-                    used_query.append(results['search_parameters']['q'])
-            else:
+            query = line['query']
+            location = line['location']
+
+            print(f'Searching for query: {query}')
+            print(f'Search location: {location}\n')
+            params = {
+                "engine": "google",
+                "q": query,
+                "location": location,
+                "gl": "us",
+                "api_key": creds.apikey
+            }
+
+            search = GoogleSearch(params)
+            results = search.get_dict()
+            
+            try:
+                if results['organic_results']:
+
+                    organic_results = results['organic_results']
+                    
+                    for item in organic_results:
+                        ranks.append(item['position'])
+                        page_title.append(item['title'])
+                        urls.append(item['link'])
+                        used_query.append(results['search_parameters']['q'])
+                else:
+                    pass
+            except:
                 pass
-        except:
-            pass
     
     time_end = datetime.datetime.now().replace(microsecond=0)
     runtime = time_end - time_start
