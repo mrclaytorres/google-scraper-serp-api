@@ -18,6 +18,7 @@ def google_result():
     urls = []
     used_query = []
     search_query_list = []
+    time_start = datetime.datetime.now().replace(microsecond=0)
 
     #Get search query and concatinate it to the url summary
     with open('search_query.txt', 'r', encoding='UTF8') as search_queries:
@@ -25,14 +26,14 @@ def google_result():
             search_query_list.append(query)
 
     for query in search_query_list:
-        print(query)
+        print(f'Searching for query: {query}')
         params = {
             "engine": "google",
             "q": query,
             "gl": "us",
+            "num": "200",
             "api_key": creds.apikey
         }
-        print(params)
 
         search = GoogleSearch(params)
         results = search.get_dict()
@@ -51,6 +52,10 @@ def google_result():
                 pass
         except:
             pass
+    
+    time_end = datetime.datetime.now().replace(microsecond=0)
+    runtime = time_end - time_start
+    print(f"Script runtime: {runtime}.")
 
     # Save scraped URLs to a CSV file
     now = datetime.datetime.now().strftime('%Y%m%d-%Hh%M')
@@ -59,7 +64,7 @@ def google_result():
     df=pd.DataFrame(data=data)
     df.index+=1
     directory = os.path.dirname(os.path.realpath(__file__))
-    filename = "scrapedfile" + now + ".csv"
+    filename = "SerpAPIscrapedfile" + now + ".csv"
     file_path = os.path.join(directory,'csvfiles/', filename)
     df.to_csv(file_path)
 
