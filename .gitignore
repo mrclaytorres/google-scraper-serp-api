@@ -152,6 +152,7 @@ csvfiles/*
 recaptcha_requests/*
 !csvfiles/.gitkeep
 search_query.csv
+*.xlsx
 
 # Credentials
 creds.py

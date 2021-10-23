@@ -39,6 +39,7 @@ def google_result():
                 "engine": "google",
                 "q": query,
                 "location": location,
+                "num": 100,
                 "gl": "us",
                 "api_key": creds.apikey
             }
